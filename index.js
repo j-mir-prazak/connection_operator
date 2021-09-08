@@ -125,7 +125,9 @@ function adHocServer(port, name) {
 				});
 
 				server.sockets.secundar.forEach((item, i) => {
+
 					item.end()
+
 				});
 
 			})
@@ -164,7 +166,7 @@ function adHocServer(port, name) {
 
 				}
 
-				if ( server.sockets.secundar.indexOf(input) > 0 ) {
+				if ( server.sockets.secundar.indexOf(input) >= 0 ) {
 
 					console.log("splice.")
 					server.sockets.secundar.splice( server.sockets.secundar.indexOf(input),1 )
@@ -224,7 +226,12 @@ function adHocSubServer(port, socket) {
 
 			server.sockets.primar.on('data', (d) =>{
 
-				server.sockets.secundar.write(d)
+
+				if ( server.sockets.secundar.readyState == "open") {
+
+						server.sockets.secundar.write(d)
+
+				}
 
 			})
 
@@ -235,6 +242,12 @@ function adHocSubServer(port, socket) {
 			})
 
 		}
+
+		socket.on('error', function(e) {
+
+			console.log("connection abruptly disconnected.")
+
+		})
 
 		socket.on('close', function() {
 

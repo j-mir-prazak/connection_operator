@@ -65,7 +65,7 @@ function setPersistent(port, address) {
 
 			var port = decoder.write(data)
 
-			console.log(port)
+			// console.log(port)
 
 			var pair = {
 
@@ -122,6 +122,11 @@ function setLocal(port, address) {
 
 	});
 
+	client.on('error', function(){
+
+		console.log('cannot connect to local.')
+
+	})
 
 	client.on('close', function() {
 
@@ -136,7 +141,7 @@ function setLocal(port, address) {
 
 function setRemote(port, address) {
 
-	console.log(port)
+	// console.log(port)
 
 	var client = new net.Socket();
 
@@ -155,19 +160,4 @@ function setRemote(port, address) {
 	});
 
 	return client
-}
-
-function crossPipe() {
-
-
-	if ( ! pair.pipe && pair.local != null && pair.server != null ) {
-		console.log("crosspipe.")
-		pair.pipe = true
-
-		pair.local.pipe(pair.server)
-		pair.server.pipe(pair.local)
-
-	}
-
-
 }
