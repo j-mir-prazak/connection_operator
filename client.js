@@ -7,7 +7,7 @@ var name = "avatar000"
 var local_port = process.argv[2] || 22
 
 var server_addr = '127.0.0.1'
-var server_bank = '1337'
+var server_bank = '7777'
 
 var pairs = new Array()
 

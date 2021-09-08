@@ -4,13 +4,14 @@ var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
 
 var listen_addr = '0.0.0.0'
-var server_bank = '1337'
+var server_bank = '7777'
 
 var servers = new Array()
 
 var ports = new Array()
 
-var secret = fs.readFileSync('/home/manjaro/bin/secret_factory', 'utf-8')
+if ( ! process.argv[2] ) process.exit(1)
+var secret = fs.readFileSync(process.argv[2], 'utf-8')
 secret = secret.replace(/\r?\n/g,"")
 // if ( secret ) console.log(secret)
 
