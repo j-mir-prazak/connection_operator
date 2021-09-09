@@ -183,12 +183,13 @@ function setRemote(port, address) {
 }
 
 setInterval(function() {
+
 	if ( connection_check == null ) {
 
 		connection_check = child_process.spawn("bash", new Array("-c", "./ping.sh"), {detached: true})
 		connection_check.on('exit', (e) => {
 
-			if ( e == 0 ) {
+			if ( e == 0 && persistent != null) {
 
 				console.log("still online.")
 				if ( persistent == null ) {
