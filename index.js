@@ -57,7 +57,7 @@ var banker = net.createServer(function(socket) {
 				if (servers.length > 0 ) {
 					servers.forEach((item, i) => {
 
-						socket.write(item.name + ": " + item.port)
+						socket.write(item.name + ": " + item.port + "\n")
 
 					});
 				}
