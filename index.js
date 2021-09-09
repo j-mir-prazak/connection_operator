@@ -122,11 +122,16 @@ function adHocServer(port, name) {
 			server.sockets.primar.on('data', (d) => {
 				if ( decoder.write(d) == "pong." ) {
 
-					console.log("pong.")
-					clearTimeout(server.timeout)
-					server.sockets.primar.write("ping.")
+					setTimeout(function(){
 
-					server.timeout = connectionTimeout(server)
+						console.log("pong.")
+						clearTimeout(server.timeout)
+						server.sockets.primar.write("ping.")
+
+						server.timeout = connectionTimeout(server)
+
+					}.bind(null, server), 2000)
+
 				}
 			})
 
