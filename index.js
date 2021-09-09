@@ -102,7 +102,7 @@ function adHocServer(port, name) {
 
 		if ( server.sockets.primar == null ) {
 
-			server.socketss.primar = input
+			server.sockets.primar = input
 
 
 			server.sockets.primar.on('data', (d) => {
