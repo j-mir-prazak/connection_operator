@@ -77,7 +77,7 @@ function setPersistent(port, address) {
 			var port = decoder.write(data)
 
 			if ( port == "ping.") {
-
+				console.log("ping.")
 				client.write("pong.")
 
 			}

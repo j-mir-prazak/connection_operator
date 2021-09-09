@@ -81,6 +81,19 @@ var banker = net.createServer(function(socket) {
 
 banker.listen(server_bank, listen_addr);
 
+function connectionTimeout(server) {
+
+		var timeout = setTimeout(function(){
+			console.log("timeout")
+			if ( server.server ){
+				server.sockets.primar.destroy()
+				server.server.close()
+			}
+		}.bind(null, server), 5000)
+	}
+	return timeout
+}
+
 
 function adHocServer(port, name) {
 
@@ -104,34 +117,16 @@ function adHocServer(port, name) {
 
 			server.sockets.primar = input
 
+			server.timeout = connectionTimeout(server)
+			server.sockets.primar.write("ping.")
 
 			server.sockets.primar.on('data', (d) => {
-
 				if ( decoder.write(d) == "pong." ) {
-
+					console.log("pong.")
 					clear(server.timeout)
-
-
-				}
-
+					server.sockets.primar.write("ping.")
+					server.timeout = connectionTimeout(server)
 			})
-
-			server.timeout = setTimeout(function(){
-
-				console.log("timeout")
-				if ( server.server ){
-					// console.log(server.server)
-					
-					server.sockets.primar.destroy()
-
-					server.server.close()
-
-				}
-
-
-			}.bind(null, server), 5000)
-
-
 
 			console.log("waiting for second connection.")
 
