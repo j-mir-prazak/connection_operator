@@ -112,9 +112,16 @@ function adHocServer(port, name) {
 
 		var input = socket
 
+
 		if ( server.sockets.primar == null ) {
 
 			server.sockets.primar = input
+
+			input.on('error', function(e) {
+
+				console.log("connection abruptly disconnected.")
+
+			})
 
 			server.timeout = connectionTimeout(server)
 			server.sockets.primar.write("ping.")
@@ -174,6 +181,12 @@ function adHocServer(port, name) {
 
 			server.sockets.secundar.push( input )
 
+			input.on('error', function(e) {
+
+				console.log("connection abruptly disconnected.")
+
+			})
+
 			bridge_port = ports.pop()
 
 			console.log("new connection.")
@@ -183,6 +196,7 @@ function adHocServer(port, name) {
 			console.log("calling otherside.")
 
 			server.sockets.primar.write( String(bridge_port) )
+
 
 			input.on('close', function() {
 
