@@ -123,6 +123,7 @@ function setPersistent(port, address) {
 		client.on('close', function() {
 
 			console.log('Persistent connection closed.');
+			persistent = null
 
 		});
 
