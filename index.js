@@ -141,6 +141,7 @@ function adHocServer(port, name) {
 
 			server.sockets.primar.on('close', function() {
 
+				if (server.timeout) clearTimeout(server.timeout)
 				server.sockets.primar = null
 
 				console.log("primar socket closed.")
