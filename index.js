@@ -127,6 +127,7 @@ function adHocServer(port, name) {
 					server.sockets.primar.write("ping.")
 
 					server.timeout = connectionTimeout(server)
+				}
 			})
 
 			console.log("waiting for second connection.")
