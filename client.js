@@ -17,6 +17,7 @@ var pairs = new Array()
 var persistent = null
 
 var connection_check = null
+var connection_timeout = null
 
 var secret = fs.readFileSync('./secret_factory', "utf-8")
 // if ( secret ) console.log(secret)
@@ -199,10 +200,10 @@ setInterval(function() {
 
 				}
 
-				setTimeout(function(){
+				connection_timeout = setTimeout(function(){
 					console.log("allow next check.")
 					connection_check = null
-					}, 1000)
+				}, 10000)
 			}
 
 			else {
