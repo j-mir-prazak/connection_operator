@@ -28,7 +28,7 @@ function askBanker() {
 		//
 		client.on('data', function(data) {
 
-			var data = decoder.write(data)
+			var data = JSON.parse(data)
 
 			console.log(data)
 

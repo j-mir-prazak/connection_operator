@@ -55,11 +55,22 @@ var banker = net.createServer(function(socket) {
 			else if ( split[0] == secret && split[1] == "list" ) {
 
 				if (servers.length > 0 ) {
+
+					var json = {
+						items: new Array()
+					}
 					servers.forEach((item, i) => {
 
-						socket.write(item.name + ": " + item.port + "\n")
+						json.items.push({
+							name: item.name,
+							port: item.port
+						})
+
 
 					});
+
+					socket.write(JSON.stringify(json))
+
 				}
 
 				socket.end()
