@@ -2,6 +2,9 @@ var net = require('net');
 var StringDecoder = require('string_decoder');
 var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
+var child_process = require('child_process')
+
+
 
 var name = process.argv[3] || "avatar000"
 var local_port = process.argv[2] || 22
@@ -12,6 +15,8 @@ var server_bank = '7777'
 var pairs = new Array()
 
 var persistent = null
+
+var connection_check = null
 
 var secret = fs.readFileSync('./secret_factory', "utf-8")
 // if ( secret ) console.log(secret)
@@ -107,6 +112,7 @@ function setPersistent(port, address) {
 
 		});
 
+		return client
 
 
 }
@@ -161,3 +167,34 @@ function setRemote(port, address) {
 
 	return client
 }
+
+setInterval(
+	if ( connection_check == null ) {
+
+		connection_check = child_process.spawn("bash", new Array("-c", "./ping.sh"), {detached: true})
+		connection_check.on('exit', (e) => {
+
+			if ( e == 0 ) {
+
+				console.log("still online.")
+				if ( persistent == null ) {
+
+					askBanker()
+
+				}
+
+			}
+
+			else {
+
+				console.log("no internets.")
+				persistent.destroy()
+				pesistent = null
+
+			}
+
+		})
+
+	}, 1000
+
+)
