@@ -120,7 +120,7 @@ function adHocServer(port, name) {
 
 				if ( server.server ) server.server.close()
 
-			}, 5000).bind(null, server)
+			}.bind(null, server), 5000)
 
 
 
