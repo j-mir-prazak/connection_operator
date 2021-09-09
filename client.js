@@ -184,6 +184,8 @@ function setRemote(port, address) {
 	return client
 }
 
+var connection_fails = 0
+
 setInterval(function() {
 
 	if ( connection_check == null ) {
@@ -203,18 +205,25 @@ setInterval(function() {
 				connection_timeout = setTimeout(function(){
 					console.log("allow next check.")
 					connection_check = null
-				}, 10000)
+				}, 30000)
 			}
 
 			else {
+				if ( connection_fails > 6 ) {
 
 				console.log("no internets.")
 				if ( persistent ) persistent.destroy()
 				pesistent = null
 				connection_check = null
+				connection_fails = 0
+
+				}
+
+				else connection_fails++
+
 			}
 
 		})
 
 	}
-}, 1000)
+}, 2000)
