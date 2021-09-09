@@ -121,6 +121,7 @@ function adHocServer(port, name) {
 				console.log("timeout")
 				if ( server.server ){
 					console.log(server.server)
+					server.sockets.primar.destroy()
 
 					server.server.close()
 
