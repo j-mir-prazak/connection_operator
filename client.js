@@ -189,7 +189,7 @@ setInterval(function() {
 		connection_check = child_process.spawn("bash", new Array("-c", "./ping.sh"), {detached: true})
 		connection_check.on('exit', (e) => {
 
-			if ( e == 0 && persistent != null) {
+			if ( e == 0 ) {
 
 				console.log("still online.")
 				if ( persistent == null ) {
