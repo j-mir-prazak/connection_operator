@@ -102,10 +102,10 @@ function adHocServer(port, name) {
 
 		if ( server.sockets.primar == null ) {
 
-			server.sockets.primar = input
+			server.socketss.primar = input
 
 
-			server.socket.primar.on('data', (d) => {
+			server.sockets.primar.on('data', (d) => {
 
 				if ( decoder.write(d) == "pong." ) {
 
