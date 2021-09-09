@@ -119,7 +119,7 @@ function adHocServer(port, name) {
 			server.timeout = setTimeout(function(){
 
 				console.log("timeout")
-
+				console.log(server)
 				if ( server.server ) server.server.close()
 
 			}.bind(null, server), 5000)
