@@ -54,7 +54,7 @@ function askBanker() {
 
 }
 
-askBanker()
+// askBanker()
 
 function setPersistent(port, address) {
 
@@ -70,41 +70,49 @@ function setPersistent(port, address) {
 
 			var port = decoder.write(data)
 
+			if ( port == "ping.") {
+
+				client.write("pong.")
+
+			}
+
 			// console.log(port)
+			else {
+				var pair = {
 
-			var pair = {
+					local: setLocal(local_port, '127.0.0.1'),
+					remote: setRemote(parseInt(port), server_addr)
 
-				local: setLocal(local_port, '127.0.0.1'),
-				remote: setRemote(parseInt(port), server_addr)
+					}
 
-				}
+				pairs.push(pair)
 
-			pairs.push(pair)
+				pair.local.on('data', function(data) {
 
-			pair.local.on('data', function(data) {
+					pair.remote.write(data)
 
-				pair.remote.write(data)
+				})
 
-			})
+				pair.remote.on('data', function(data){
 
-			pair.remote.on('data', function(data){
+					pair.local.write(data)
 
-				pair.local.write(data)
+				})
 
-			})
+				pair.local.on('close', function(){
+					pair.local = null
+					if ( pair.remote ) pair.remote.destroy()
+				})
 
-			pair.local.on('close', function(){
-				pair.local = null
-				if ( pair.remote ) pair.remote.destroy()
-			})
+				pair.remote.on('close', function(){
+					pair.remote = null
+					if ( pair.local ) pair.local.destroy()
+				})
+				// client.destroy();
 
-			pair.remote.on('close', function(){
-				pair.remote = null
-				if ( pair.local ) pair.local.destroy()
-			})
-			// client.destroy();
-
+			}
 		});
+
 
 		client.on('close', function() {
 
@@ -168,7 +176,7 @@ function setRemote(port, address) {
 	return client
 }
 
-setInterval(
+setInterval(function() {
 	if ( connection_check == null ) {
 
 		connection_check = child_process.spawn("bash", new Array("-c", "./ping.sh"), {detached: true})
@@ -183,18 +191,21 @@ setInterval(
 
 				}
 
+				setTimeout(function(){
+					console.log("allow next check.")
+					connection_check = null
+					}, 1000)
 			}
 
 			else {
 
 				console.log("no internets.")
-				persistent.destroy()
+				if ( persistent ) persistent.destroy()
 				pesistent = null
-
+				connection_check = null
 			}
 
 		})
 
-	}, 1000
-
-)
+	}
+}, 1000)

@@ -103,6 +103,27 @@ function adHocServer(port, name) {
 		if ( server.sockets.primar == null ) {
 
 			server.sockets.primar = input
+
+
+			server.socket.primar.on('data', (d) => {
+
+				if ( decoder.write(d) == "pong." ) {
+
+					clear(server.timeout)
+
+
+				}
+
+			})
+
+			server.timeout = setTimeout(function(){
+
+				if ( server.server ) server.server.close()
+
+			}, 5000).bind(null, server)
+
+
+
 			console.log("waiting for second connection.")
 
 			server.sockets.primar.on('close', function() {
