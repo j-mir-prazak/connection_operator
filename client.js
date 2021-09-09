@@ -45,6 +45,12 @@ function askBanker() {
 
 		});
 
+		client.on('error', function() {
+
+			console.log('connection refused.')
+
+		})
+
 		client.on('close', function() {
 
 			console.log('Banker connection closed.');
