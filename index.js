@@ -125,7 +125,7 @@ function adHocServer(port, name) {
 					clearTimeout(server.timeout)
 					server.timeout = setTimeout(function(){
 
-					 clearTimeout = server.timeout
+					 clearTimeout(server.timeout)
 
 						console.log("pong.")
 						server.sockets.primar.write("ping.")
