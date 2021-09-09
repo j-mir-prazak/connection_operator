@@ -3,17 +3,17 @@ var StringDecoder = require('string_decoder');
 var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
 
-var name = "avatar000"
+var name = process.argv[3] || "avatar000"
 var local_port = process.argv[2] || 22
 
-var server_addr = '127.0.0.1'
+var server_addr = '139.162.251.161'
 var server_bank = '7777'
 
 var pairs = new Array()
 
 var persistent = null
 
-var secret = fs.readFileSync('/home/manjaro/bin/secret_factory', "utf-8")
+var secret = fs.readFileSync('./secret_factory', "utf-8")
 // if ( secret ) console.log(secret)
 
 function askBanker() {
