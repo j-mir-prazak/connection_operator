@@ -186,9 +186,14 @@ function setRemote(port, address) {
 
 var connection_fails = 0
 
+console.log("setting interval.")
+
 setInterval(function() {
 
+
 	if ( connection_check == null ) {
+
+		console.log("ping server.")
 
 		connection_check = child_process.spawn("bash", new Array("-c", "./ping.sh"), {detached: true})
 		connection_check.on('exit', (e) => {
