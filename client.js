@@ -216,18 +216,19 @@ setInterval(function() {
 			}
 
 			else {
+
 				if ( connection_fails > 6 ) {
 
 				console.log("no internets.")
 				if ( persistent ) persistent.destroy()
 				pesistent = null
-				connection_check = null
 				connection_fails = 0
 
 				}
 
 				else connection_fails++
 
+				connection_check = null
 			}
 
 		})
