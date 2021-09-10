@@ -205,7 +205,7 @@ setInterval(function() {
 				connection_timeout = setTimeout(function(){
 					console.log("allow next check.")
 					connection_check = null
-				}, 30000)
+				}, 3000)
 			}
 
 			else {
