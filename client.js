@@ -193,12 +193,12 @@ setInterval(function() {
 
 	if ( connection_check == null ) {
 
-		console.log("ping server.")
+		// console.log("ping server.")
 
 		connection_check = child_process.spawn("bash", new Array("-c", "./ping.sh"), {detached: true})
 		connection_check.on('exit', (e) => {
 
-			console.log(e)
+			// console.log(e)
 
 			if ( e == 0 ) {
 
