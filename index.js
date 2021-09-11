@@ -28,6 +28,10 @@ var banker = net.createServer(function(socket) {
 
 	var input = socket
 
+	input.on('error', function(e){
+		console.log('banker connection abruptly ended.')
+	})
+
 	socket.on('data', function(d){
 
 		var data = decoder.write(d).replace(/\r?\n/g, "")
@@ -130,7 +134,7 @@ function adHocServer(port, name) {
 
 			input.on('error', function(e) {
 
-				console.log("connection abruptly disconnected.")
+				console.log(port + " primar connection abruptly disconnected.")
 
 			})
 
@@ -194,7 +198,7 @@ function adHocServer(port, name) {
 
 			input.on('error', function(e) {
 
-				console.log("connection abruptly disconnected.")
+				console.log(port + " adhoc secoundar connection abruptly disconnected.")
 
 			})
 
@@ -306,7 +310,7 @@ function adHocSubServer(port, socket) {
 
 		socket.on('error', function(e) {
 
-			console.log("connection abruptly disconnected.")
+			console.log(port + " connection abruptly disconnected.")
 
 		})
 
