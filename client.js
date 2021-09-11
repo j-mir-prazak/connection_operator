@@ -73,6 +73,12 @@ function setPersistent(port, address) {
 
 		});
 
+		client.on('error', function(e) {
+
+			console.log('persistent connection reset.')
+
+		})
+
 		client.on('data', function(data) {
 
 			var port = decoder.write(data)
