@@ -51,7 +51,12 @@ var banker = net.createServer(function(socket) {
 				var hoc = adHocServer(port, split[1])
 				console.log("client name: " + split[1])
 
+				try {
 				socket.write( String(port) )
+				}
+				catch (e) {
+					console.log("error writing.")
+				}
 				socket.end()
 
 			}
@@ -73,7 +78,12 @@ var banker = net.createServer(function(socket) {
 
 					});
 
+					try {
 					socket.write(JSON.stringify(json))
+					}
+					catch (e) {
+						console.log("error writing.")
+					}
 
 				}
 
@@ -294,7 +304,14 @@ function adHocSubServer(port, socket) {
 
 				if ( server.sockets.secundar.readyState == "open") {
 
+						try {
+
 						server.sockets.secundar.write(d)
+
+						}
+						catch (e) {
+							console.log("error writing.")
+						}
 
 				}
 
@@ -302,7 +319,16 @@ function adHocSubServer(port, socket) {
 
 			server.sockets.secundar.on('data', (d) =>{
 
+				try {
+
 				server.sockets.primar.write(d)
+
+				}
+				catch (e) {
+
+					console.log("error writing.")
+
+				}
 
 			})
 

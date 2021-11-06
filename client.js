@@ -30,7 +30,12 @@ function askBanker() {
 
 			console.log('Connected.');
 
-			client.write(secret+":"+name);
+			try {
+				client.write(secret+":"+name);
+			}
+			catch (e) {
+				console.log("error writing.")
+			}
 
 		});
 		//
@@ -85,7 +90,12 @@ function setPersistent(port, address) {
 
 			if ( port == "ping.") {
 				// console.log("ping.")
+				try {
 				client.write("pong.")
+				}
+				catch (e) {
+					console.log("error writing.")
+				}
 
 			}
 
@@ -102,13 +112,23 @@ function setPersistent(port, address) {
 
 				pair.local.on('data', function(data) {
 
+					try {
 					pair.remote.write(data)
+					}
+					catch (e) {
+						console.log("error writing.")
+					}
 
 				})
 
 				pair.remote.on('data', function(data){
 
+					try {
 					pair.local.write(data)
+					}
+					catch (e) {
+						console.log("error writing.")
+					}
 
 				})
 
