@@ -4,7 +4,7 @@ var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
 
 var listen_addr = '0.0.0.0'
-var server_bank = '7777'
+var server_bank = '7779'
 
 var servers = new Array()
 
@@ -15,7 +15,7 @@ var secret = fs.readFileSync(process.argv[2], 'utf-8')
 secret = secret.replace(/\r?\n/g,"")
 // if ( secret ) console.log(secret)
 
-for( var i = 8000; i < 9000; i++) {
+for( var i = 9000; i < 10000; i++) {
 
 	ports.push(i)
 
@@ -50,12 +50,16 @@ var banker = net.createServer(function(socket) {
 				var port = ports.shift()
 				var hoc = adHocServer(port, split[1])
 				console.log("client name: " + split[1])
-
+				console.log(port)
 				try {
+
 				socket.write( String(port) )
+
 				}
 				catch (e) {
+
 					console.log("error writing.")
+
 				}
 				socket.end()
 
