@@ -199,6 +199,8 @@ function setRemote(port, address) {
 
 	var client = new net.Socket();
 
+	console.log(port)
+
 	client.connect(port, server_addr, function(s) {
 
 		console.log('Server connected.');
