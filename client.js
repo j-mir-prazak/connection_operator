@@ -88,6 +88,7 @@ function setPersistent(port, address) {
 
 			var port = decoder.write(data)
 
+			console.log(port)
 			if ( port == "ping.") {
 				// console.log("ping.")
 				try {
@@ -99,7 +100,7 @@ function setPersistent(port, address) {
 
 			}
 
-			console.log(port)
+
 			else {
 				var pair = {
 
