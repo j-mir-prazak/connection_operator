@@ -104,6 +104,8 @@ function setPersistent(port, address) {
 
 
 			else {
+
+				port = port.replace(/(.*?)\;.*/, "$1")
 				var pair = {
 
 					local: setLocal(local_port, '127.0.0.1'),

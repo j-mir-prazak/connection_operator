@@ -227,7 +227,7 @@ function adHocServer(port, name) {
 
 			console.log(bridge_port)
 
-			server.sockets.primar.write( String(bridge_port) )
+			server.sockets.primar.write( String(bridge_port) + ";" )
 
 
 			input.on('close', function() {
