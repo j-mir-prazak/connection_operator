@@ -146,6 +146,12 @@ function setPersistent(port, address) {
 			}
 		});
 
+		client.on('error', function(){
+
+			console.log('Persistent connection error.')
+
+		})
+
 
 		client.on('close', function() {
 
@@ -199,6 +205,12 @@ function setRemote(port, address) {
 
 
 	});
+
+	client.on('error', function(){
+
+		console.log('Remote connection error.')
+
+	})
 
 
 	client.on('close', function() {
