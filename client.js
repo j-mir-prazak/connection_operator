@@ -99,7 +99,7 @@ function setPersistent(port, address) {
 
 			}
 
-			// console.log(port)
+			console.log(port)
 			else {
 				var pair = {
 
