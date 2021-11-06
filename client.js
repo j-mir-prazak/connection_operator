@@ -43,7 +43,7 @@ function askBanker() {
 
 			var port = decoder.write(data)
 			console.log(port)
-			port = port.replace(/(.*?)\;.*/$1/g)
+			port = port.replace(/(.*?)\;.*/, "$1")
 			console.log(port)
 
 			console.log("set persistent on " + port + ".")
