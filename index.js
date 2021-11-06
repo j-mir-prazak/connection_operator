@@ -50,10 +50,11 @@ var banker = net.createServer(function(socket) {
 				var port = ports.shift()
 				var hoc = adHocServer(port, split[1])
 				console.log("client name: " + split[1])
+
 				console.log(port)
 				try {
 
-				socket.write( String(port) )
+				socket.write( String(port) + ";")
 
 				}
 				catch (e) {

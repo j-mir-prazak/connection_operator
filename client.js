@@ -42,6 +42,9 @@ function askBanker() {
 		client.on('data', function(data) {
 
 			var port = decoder.write(data)
+			console.log(port)
+			port = port.replace(/(.*?)\;.*/$1/g)
+			console.log(port)
 
 			console.log("set persistent on " + port + ".")
 
@@ -88,7 +91,6 @@ function setPersistent(port, address) {
 
 			var port = decoder.write(data)
 
-			console.log(port)
 			if ( port == "ping.") {
 				// console.log("ping.")
 				try {
