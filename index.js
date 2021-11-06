@@ -224,6 +224,8 @@ function adHocServer(port, name) {
 
 			console.log("calling otherside.")
 
+			console.log(bridge_port)
+
 			server.sockets.primar.write( String(bridge_port) )
 
 
