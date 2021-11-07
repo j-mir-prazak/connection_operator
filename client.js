@@ -10,8 +10,8 @@ var child_process = require('child_process')
 var name = process.argv[3] || "avatar000"
 var local_port = process.argv[2] || 22
 
-var server_addr = 'localhost'
-// var server_addr = '139.162.251.161'
+// var server_addr = 'localhost'
+var server_addr = '139.162.251.161'
 var server_bank = '7778'
 
 var pairs = new Array()
