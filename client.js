@@ -1,4 +1,5 @@
-var net = require('net');
+var localnet = require('net');
+var net = require('tls');
 var StringDecoder = require('string_decoder');
 var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
@@ -9,8 +10,9 @@ var child_process = require('child_process')
 var name = process.argv[3] || "avatar000"
 var local_port = process.argv[2] || 22
 
-var server_addr = '139.162.251.161'
-var server_bank = '7779'
+var server_addr = 'localhost'
+// var server_addr = '139.162.251.161'
+var server_bank = '7778'
 
 var pairs = new Array()
 
@@ -25,7 +27,7 @@ var secret = fs.readFileSync('./secret_factory', "utf-8")
 function askBanker() {
 
 
-	var client = new net.Socket();
+	var client = new net.TLSSocket();
 	client.connect(server_bank, server_addr, function(s) {
 
 			console.log('Connected.');
@@ -73,11 +75,12 @@ function askBanker() {
 
 function setPersistent(port, address) {
 
-	var client = new net.Socket();
+	var client = new net.TLSSocket();
 
 	client.connect(port, address, function(s) {
 
 			console.log('Persistent connected.');
+			client.write("pong")
 
 		});
 
@@ -89,10 +92,13 @@ function setPersistent(port, address) {
 
 		client.on('data', function(data) {
 
+			// console.log(data)
+
 			var port = decoder.write(data)
 
+
 			if ( port == "ping.") {
-				// console.log("ping.")
+				console.log("ping.")
 				try {
 				client.write("pong.")
 				}
@@ -127,6 +133,8 @@ function setPersistent(port, address) {
 				})
 
 				pair.remote.on('data', function(data){
+
+					// console.log(data)
 
 					try {
 					pair.local.write(data)
@@ -172,9 +180,11 @@ function setPersistent(port, address) {
 
 function setLocal(port, address) {
 
-	var client = new net.Socket();
+	var client = new localnet.Socket();
 
 	client.connect(port, '127.0.0.1', function(s) {
+
+		client.write("")
 
 		console.log('Local connected.');
 
@@ -202,11 +212,13 @@ function setRemote(port, address) {
 
 	// console.log(port)
 
-	var client = new net.Socket();
+	var client = new net.TLSSocket();
 
-	console.log(port)
+	console.log("connect here: " + port)
 
 	client.connect(port, server_addr, function(s) {
+
+		client.write("")
 
 		console.log('Server connected.');
 

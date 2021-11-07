@@ -1,10 +1,11 @@
-var net = require('net');
+// var net = require('net');
+var net = require('tls');
 var StringDecoder = require('string_decoder');
 var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
 
 var listen_addr = '0.0.0.0'
-var server_bank = '7779'
+var server_bank = '7778'
 
 var servers = new Array()
 
@@ -15,16 +16,20 @@ var secret = fs.readFileSync(process.argv[2], 'utf-8')
 secret = secret.replace(/\r?\n/g,"")
 // if ( secret ) console.log(secret)
 
-for( var i = 9000; i < 10000; i++) {
+for( var i = 19000; i < 20000; i++) {
 
 	ports.push(i)
 
 }
 
+var server_options = {
+  key: fs.readFileSync('./cert/private.pem'),
+  cert: fs.readFileSync('./cert/self-sign.pem'),
+  // requestCert: true,
+  ca: [ fs.readFileSync('./cert/private-csr.pem') ]
+};
 
-
-
-var banker = net.createServer(function(socket) {
+var banker = net.createServer(server_options, function(socket) {
 
 	var input = socket
 
@@ -52,8 +57,10 @@ var banker = net.createServer(function(socket) {
 				console.log("client name: " + split[1])
 
 				console.log(port)
+
 				try {
 
+				console.log(port)
 				socket.write( String(port) + ";")
 
 				}
@@ -116,6 +123,7 @@ function connectionTimeout(server) {
 		var timeout = setTimeout(function(){
 			console.log("timeout")
 			if ( server.server ){
+				server.sockets.primar.end()
 				server.sockets.primar.destroy()
 				server.server.close()
 			}
@@ -133,7 +141,7 @@ function adHocServer(port, name) {
 
 	var server
 
-	var hoc = net.createServer(function(socket) {
+	var hoc = net.createServer(server_options, function(socket) {
 
 		console.log(server.port + " connection.")
 
@@ -296,7 +304,7 @@ function adHocSubServer(port, socket) {
 
 	var server
 
-	var hoc = net.createServer(function(socket) {
+	var hoc = net.createServer(server_options, function(socket) {
 
 		console.log(server.port + " connection.")
 
