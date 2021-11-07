@@ -17,7 +17,10 @@ var secret = fs.readFileSync(process.argv[2], 'utf-8')
 secret = secret.replace(/\r?\n/g,"")
 // if ( secret ) console.log(secret)
 
-for( var i = 443; i < 600; i++) {
+
+ports.push(443)
+
+for( var i = 10000; i < 11000; i++) {
 
 	ports.push(i)
 
