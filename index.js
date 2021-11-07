@@ -4,6 +4,7 @@ var StringDecoder = require('string_decoder');
 var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
 
+
 var listen_addr = '0.0.0.0'
 var server_bank = '7778'
 
@@ -16,7 +17,7 @@ var secret = fs.readFileSync(process.argv[2], 'utf-8')
 secret = secret.replace(/\r?\n/g,"")
 // if ( secret ) console.log(secret)
 
-for( var i = 19000; i < 20000; i++) {
+for( var i = 443; i < 600; i++) {
 
 	ports.push(i)
 
