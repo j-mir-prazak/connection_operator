@@ -24,6 +24,7 @@ for( var i = 9000; i < 10000; i++) {
 
 
 
+
 var banker = net.createServer(function(socket) {
 
 	var input = socket
