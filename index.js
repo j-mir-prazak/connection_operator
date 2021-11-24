@@ -344,7 +344,7 @@ function adHocSubServer(port, socket) {
 					// var data = d
 					// if (data+"" == "blank" ) console.log("null data: " + data)
 					// else server.sockets.primar.write(data)
-					server.sockets.primar.write(data)
+					server.sockets.primar.write(d)
 				}
 				catch (e) {
 
@@ -393,10 +393,10 @@ function adHocSubServer(port, socket) {
 
 	});
 
-	hoc.on('newSession', (socket) => {
-		console.log("connection newSession")
-		// console.log(socket)
-	})
+	// hoc.on('newSession', (socket) => {
+	// 	console.log("connection newSession")
+	// 	// console.log(socket)
+	// })
 
 
 	hoc.listen(port, '0.0.0.0');
