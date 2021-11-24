@@ -394,7 +394,7 @@ function adHocSubServer(port, socket) {
 
 	});
 
-	hoc.on('secureConnection', (socket) => {
+	hoc.on('newSession', (socket) => {
 		console.log("connection")
 		console.log(socket)
 	})
