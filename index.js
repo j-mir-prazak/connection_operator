@@ -394,6 +394,11 @@ function adHocSubServer(port, socket) {
 
 	});
 
+	hoc.on('connection', (socket) => {
+		console.log("connection")
+		console.log(socket)
+	})
+
 
 	hoc.listen(port, '0.0.0.0');
 
