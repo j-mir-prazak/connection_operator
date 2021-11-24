@@ -92,14 +92,14 @@ function setPersistent(port, address) {
 
 		client.on('data', function(data) {
 
-			console.log("persistent: " + data)
+			// console.log("persistent: " + data)
 
 			var port = decoder.write(data)
 
 
 			if ( port == "ping.") {
 
-				console.log("ping.")
+				// console.log("ping.")
 
 				try {
 				client.write("pong.")
@@ -160,7 +160,7 @@ function setPersistent(port, address) {
 							catch (e) {
 
 								console.log("error writing.")
-								
+
 							}
 						})
 
@@ -288,7 +288,7 @@ setInterval(function() {
 
 			if ( e == 0 ) {
 
-				console.log("still online.")
+				// console.log("still online.")
 				if ( persistent == null ) {
 
 					askBanker()
@@ -296,7 +296,7 @@ setInterval(function() {
 				}
 
 				connection_timeout = setTimeout(function(){
-					console.log("allow next check.")
+					// console.log("allow next check.")
 					connection_check = null
 				}, 3000)
 			}

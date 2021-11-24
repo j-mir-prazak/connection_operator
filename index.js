@@ -157,6 +157,8 @@ function adHocServer(port, name) {
 
 		if ( server.sockets.primar == null ) {
 
+			console.log("setting up primary connection.")
+
 			server.sockets.primar = input
 
 			input.on('error', function(e) {
@@ -237,7 +239,7 @@ function adHocServer(port, name) {
 
 			console.log("calling otherside.")
 
-			console.log(bridge_port)
+			console.log("bridge port: " + bridge_port)
 
 			server.sockets.primar.write( String(bridge_port) + ";" )
 
@@ -327,7 +329,9 @@ function adHocSubServer(port, socket) {
 
 						}
 						catch (e) {
+
 							console.log("error writing.")
+
 						}
 
 
@@ -347,6 +351,19 @@ function adHocSubServer(port, socket) {
 				}
 
 			})
+
+			try {
+
+			server.sockets.secundar.write(input.read())
+
+			}
+			catch (e) {
+
+				console.log("error writing.")
+
+			}
+
+
 
 		}
 
