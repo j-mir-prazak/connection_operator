@@ -111,52 +111,57 @@ function setPersistent(port, address) {
 
 			else {
 
-				port = port.replace(/(.*?)\;.*/, "$1")
-				var pair = {
+				var ports = port.split(/;/, "$1")
+				ports.forEach((port, i) => {
+					if ( port != '') {
+						var pair = {
 
-					local: setLocal(local_port, '127.0.0.1'),
-					remote: setRemote(parseInt(port), server_addr)
+							local: setLocal(local_port, '127.0.0.1'),
+							remote: setRemote(parseInt(port), server_addr)
 
+							}
+
+						pairs.push(pair)
+
+						pair.local.on('data', function(data) {
+
+							try {
+							pair.remote.write(data)
+							}
+							catch (e) {
+								console.log("error writing.")
+							}
+
+						})
+
+						pair.remote.on('data', function(data){
+
+							// console.log(data)
+
+							try {
+							pair.local.write(data)
+							}
+							catch (e) {
+								console.log("error writing.")
+							}
+
+						})
+
+						pair.local.on('close', function(){
+							pair.local = null
+							if ( pair.remote ) pair.remote.destroy()
+						})
+
+						pair.remote.on('close', function(){
+							pair.remote = null
+							if ( pair.local ) pair.local.destroy()
+						})
+					// client.destroy();
 					}
+				}
+			});
 
-				pairs.push(pair)
 
-				pair.local.on('data', function(data) {
-
-					try {
-					pair.remote.write(data)
-					}
-					catch (e) {
-						console.log("error writing.")
-					}
-
-				})
-
-				pair.remote.on('data', function(data){
-
-					// console.log(data)
-
-					try {
-					pair.local.write(data)
-					}
-					catch (e) {
-						console.log("error writing.")
-					}
-
-				})
-
-				pair.local.on('close', function(){
-					pair.local = null
-					if ( pair.remote ) pair.remote.destroy()
-				})
-
-				pair.remote.on('close', function(){
-					pair.remote = null
-					if ( pair.local ) pair.local.destroy()
-				})
-				// client.destroy();
-
-			}
 		});
 
 		client.on('error', function(){
