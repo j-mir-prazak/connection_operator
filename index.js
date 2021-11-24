@@ -341,7 +341,10 @@ function adHocSubServer(port, socket) {
 
 				try {
 
-				server.sockets.primar.write(d)
+				var data = d
+				console.log(data+"")
+
+				server.sockets.primar.write(d+"")
 
 				}
 				catch (e) {
@@ -353,6 +356,7 @@ function adHocSubServer(port, socket) {
 			})
 
 			try {
+
 			var data = input.read()
 			console.log(""+data)
 			server.sockets.secundar.write( data )
