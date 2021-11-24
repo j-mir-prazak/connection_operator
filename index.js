@@ -395,8 +395,8 @@ function adHocSubServer(port, socket) {
 	});
 
 	hoc.on('newSession', (socket) => {
-		console.log("connection")
-		console.log(socket)
+		console.log("connection newSession")
+		// console.log(socket)
 	})
 
 

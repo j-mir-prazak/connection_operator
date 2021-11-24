@@ -247,7 +247,7 @@ function setRemote(port, address) {
 
 		// console.log(client)
 		//
-		// client.write(new Buffer.alloc(0))
+		client.write(new Buffer.alloc(0))
 
 		console.log('Server connected.');
 
@@ -257,6 +257,12 @@ function setRemote(port, address) {
 	client.on('error', function(){
 
 		console.log('Remote connection error.')
+
+	})
+
+	client.on('secureConnect', function(){
+
+		console.log('remote is connected securely')
 
 	})
 
