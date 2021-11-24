@@ -64,7 +64,7 @@ var banker = net.createServer(server_options, function(socket) {
 
 				try {
 
-				console.log(port)
+				console.log("sending port to connect to: " + port)
 				socket.write( String(port) + ";")
 
 				}
@@ -321,8 +321,6 @@ function adHocSubServer(port, socket) {
 			server.sockets.primar.on('data', (d) =>{
 
 
-				if ( server.sockets.secundar.readyState == "open") {
-
 						try {
 
 						server.sockets.secundar.write(d)
@@ -332,7 +330,6 @@ function adHocSubServer(port, socket) {
 							console.log("error writing.")
 						}
 
-				}
 
 			})
 

@@ -92,13 +92,15 @@ function setPersistent(port, address) {
 
 		client.on('data', function(data) {
 
-			// console.log(data)
+			console.log("persistent: " + data)
 
 			var port = decoder.write(data)
 
 
 			if ( port == "ping.") {
+
 				console.log("ping.")
+
 				try {
 				client.write("pong.")
 				}
@@ -111,9 +113,15 @@ function setPersistent(port, address) {
 
 			else {
 
-				var ports = port.split(/;/, "$1")
+				var ports = port.split(/;/)
+				console.log(ports)
+
 				ports.forEach((port, i) => {
+
 					if ( port != '') {
+
+						console.log(port)
+
 						var pair = {
 
 							local: setLocal(local_port, '127.0.0.1'),
@@ -123,36 +131,50 @@ function setPersistent(port, address) {
 
 						pairs.push(pair)
 
-						pair.local.on('data', function(data) {
+						pair.local.on('connect', () => {
+							console.log('local connected')
+						})
 
+						pair.remote.on('connect', () => {
+							console.log('remote connected')
+						})
+
+						pair.local.on('data', function(data) {
+							console.log("local data")
 							try {
-							pair.remote.write(data)
+								pair.remote.write(data)
 							}
 							catch (e) {
 								console.log("error writing.")
 							}
-
 						})
+
 
 						pair.remote.on('data', function(data){
-
-							// console.log(data)
-
+							console.log("remote data")
 							try {
-							pair.local.write(data)
-							}
-							catch (e) {
-								console.log("error writing.")
+
+								pair.local.write(data)
 							}
 
+							catch (e) {
+
+								console.log("error writing.")
+								
+							}
 						})
 
+
 						pair.local.on('close', function(){
+
+							console.log("local close; killing")
 							pair.local = null
 							if ( pair.remote ) pair.remote.destroy()
+
 						})
 
 						pair.remote.on('close', function(){
+							console.log("remote close; killing")
 							pair.remote = null
 							if ( pair.local ) pair.local.destroy()
 						})
@@ -188,8 +210,9 @@ function setLocal(port, address) {
 
 	client.connect(port, '127.0.0.1', function(s) {
 
-		client.write("")
+		// client.write("")
 
+		// client.write(new Buffer.alloc(0))
 		console.log('Local connected.');
 
 
@@ -222,7 +245,9 @@ function setRemote(port, address) {
 
 	client.connect(port, server_addr, function(s) {
 
-		client.write("")
+		// console.log(client)
+		//
+		// client.write(new Buffer.alloc(0))
 
 		console.log('Server connected.');
 
