@@ -247,7 +247,7 @@ function setRemote(port, address) {
 
 		// console.log(client)
 		//
-		client.write(new Buffer.alloc(0))
+		// client.write(new Buffer.alloc(0))
 
 		console.log('Server connected.');
 

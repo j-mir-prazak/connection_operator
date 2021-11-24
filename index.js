@@ -310,7 +310,7 @@ function adHocSubServer(port, socket) {
 
 	var server
 
-	var hoc = net.createServer(server_options, function(socket) {
+	var hoc = net.createServer(server_options, (socket) => {
 
 		console.log(server.port + " connection.")
 
