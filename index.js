@@ -342,7 +342,7 @@ function adHocSubServer(port, socket) {
 				try {
 
 				var data = d
-				console.log(data+"")
+				if (data == null ) console.log("null data: " + data)
 
 				server.sockets.primar.write(d+"")
 
