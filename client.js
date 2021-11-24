@@ -158,12 +158,10 @@ function setPersistent(port, address) {
 						})
 					// client.destroy();
 					}
-				}
-			});
-		}
+				})
+			}
 
-
-		});
+		})
 
 		client.on('error', function(){
 
