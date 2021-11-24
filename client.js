@@ -160,6 +160,7 @@ function setPersistent(port, address) {
 					}
 				}
 			});
+		}
 
 
 		});
