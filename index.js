@@ -339,9 +339,9 @@ function adHocSubServer(port, socket) {
 
 			server.sockets.secundar.on('data', (d) =>{
 
+				var data = d
 				try {
 
-					var data = d
 					// if (data+"" == "blank" ) console.log("null data: " + data)
 					// else server.sockets.primar.write(data)
 					server.sockets.primar.write(data)
