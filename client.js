@@ -139,6 +139,7 @@ function setPersistent(port, address) {
 							console.log('remote connected')
 						})
 
+
 						pair.local.on('data', function(data) {
 							console.log("local data")
 							try {
@@ -149,8 +150,7 @@ function setPersistent(port, address) {
 							}
 						})
 
-
-						pair.remote.on('data', function(data){
+						pair.remote.on('data', function(data) {
 							console.log("remote data")
 							try {
 

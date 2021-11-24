@@ -343,7 +343,7 @@ function adHocSubServer(port, socket) {
 
 				var data = d
 				if (data+"" == "blank" ) console.log("null data: " + data)
-				else server.sockets.primar.write(d)
+				else server.sockets.primar.write(data)
 
 				}
 				catch (e) {
