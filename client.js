@@ -1,5 +1,6 @@
 var localnet = require('net');
 var net = require('tls');
+var tls = require('tls');
 var StringDecoder = require('string_decoder');
 var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
@@ -141,7 +142,7 @@ function setPersistent(port, address) {
 
 
 						pair.local.on('data', function(data) {
-							console.log("local data")
+							// console.log("local data")
 							try {
 								pair.remote.write(data)
 							}
@@ -151,7 +152,9 @@ function setPersistent(port, address) {
 						})
 
 						pair.remote.on('data', function(data) {
-							console.log("remote data")
+							var data = data
+							console.log("remote data:\n" + data)
+
 							try {
 
 								pair.local.write(data)
@@ -239,24 +242,26 @@ function setRemote(port, address) {
 
 	// console.log(port)
 
-	var client = new net.TLSSocket();
+// new net.TLSSocket();
 
 	console.log("connect here: " + port)
 
-	client.connect(port, server_addr, function(s) {
+	var client = tls.connect(port, server_addr, function(s) {
+		// var client = client.connect(port, server_addr, function(s) {
 
 		// console.log(client)
 		//
+		console.log('Server connected.');
 		client.write("")
 
-		console.log('Server connected.');
 
 
 	});
 
-	client.on('error', function(){
+	client.on('error', function(e){
 
 		console.log('Remote connection error.')
+		console.log(e)
 
 	})
 
