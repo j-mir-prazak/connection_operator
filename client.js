@@ -142,7 +142,9 @@ function setPersistent(port, address) {
 						// 	return null
 						// }
 
-
+						// setInterval(()=>{
+						// 	if ( pair.remote.writableLength ) console.log(pair.remote.writableLength)
+						// },250)
 						pair.local.on('data', function(data) {
 							var data = data
 							// buffer_to_remote.push(data)
@@ -155,7 +157,7 @@ function setPersistent(port, address) {
 							catch (e) {
 								console.log("error writing.")
 							}
-							
+
 						})
 
 						pair.remote.on('drain', () => {
