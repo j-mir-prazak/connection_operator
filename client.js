@@ -118,21 +118,8 @@ function setPersistent(port, address) {
 						})
 
 
-						// var stopper = setInterval(() => {
-						// 	// console.log(pair.remote.writableNeedDrain)
-						// 	if ( pair.local ) {
-						// 		if ( pair.remote.writableNeedDrain ) {
-						// 			pair.local.pause()
-						// 			console.log("pause")
-						// 		}
-						// 		else {
-						// 			pair.local.resume()
-						// 			console.log("resume")
-						// 		}
-						// 	}
-						// }, 2)
 						// var queue = null
-						// var buffer_to_remote = new Array()
+						var buffer_to_remote = new Array()
 						// function queue_run() {
 						// 	while (buffer_to_remote.length > 0 ) {
 						// 		var data = buffer_to_remote.shift()
@@ -143,8 +130,25 @@ function setPersistent(port, address) {
 						// }
 
 						// setInterval(()=>{
-						// 	if ( pair.remote.writableLength ) console.log(pair.remote.writableLength)
-						// },250)
+						// 	if ( buffer_to_remote.length > 0 && pair.remote.writableLength < 1024*1024*4) {
+						// 		console.log(pair.remote.writableLength)
+						// 		pair.remote.write( buffer_to_remote.shift() )
+						// 	}
+						// },2)
+						var stopper = setInterval(() => {
+							// console.log(pair.remote.writableNeedDrain)
+							if ( pair.local && pair.remote ) {
+								if ( pair.remote.writableNeedDrain ) {
+									pair.local.pause()
+								}
+								else {
+									pair.local.resume()
+								}
+							}
+							if (! pair.local ) { clearInterval(stopper); console.log('clearning internval.') }
+						}, 2)
+
+
 						pair.local.on('data', function(data) {
 							var data = data
 							// buffer_to_remote.push(data)
@@ -157,11 +161,6 @@ function setPersistent(port, address) {
 							catch (e) {
 								console.log("error writing.")
 							}
-
-						})
-
-						pair.remote.on('drain', () => {
-							console.log('drain.')
 
 						})
 
