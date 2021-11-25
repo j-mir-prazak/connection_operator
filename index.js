@@ -44,10 +44,6 @@ var banker = net.createServer(server_options, function(socket) {
 	socket.on('data', function(d){
 
 		var data = decoder.write(d).replace(/\r?\n/g, "")
-
-		// console.log( data == secret )
-		// console.log(data)
-		// console.log(secret)
 		if ( data.match(/\:/) ) {
 
 			var split = data.split(/\:/)
@@ -140,31 +136,20 @@ function adHocServer(port, name) {
 
 	var port = port || false
 	var name = name
-
 	console.log("serving on port " + port + ".")
-
 	var server
-
 	var hoc = net.createServer(server_options, function(socket) {
 
 		console.log(server.port + " connection.")
-
 		var bridge_port = null
 		var bridge_server = null
-
 		var input = socket
 
-
 		if ( server.sockets.primar == null ) {
-
 			console.log("setting up primary connection.")
-
 			server.sockets.primar = input
-
 			input.on('error', function(e) {
-
 				console.log(port + " primar connection abruptly disconnected.")
-
 			})
 
 			server.timeout = connectionTimeout(server)
@@ -175,12 +160,9 @@ function adHocServer(port, name) {
 
 					clearTimeout(server.timeout)
 					server.timeout = setTimeout(function(){
-
 					 clearTimeout(server.timeout)
-
 						// console.log("pong.")
 						server.sockets.primar.write("ping.")
-
 						server.timeout = connectionTimeout(server)
 
 					}.bind(null, server), 5000)
@@ -189,7 +171,6 @@ function adHocServer(port, name) {
 			})
 
 			console.log("waiting for second connection.")
-
 			server.sockets.primar.on('close', function() {
 
 				if (server.timeout) clearTimeout(server.timeout)
@@ -206,15 +187,11 @@ function adHocServer(port, name) {
 				}
 
 				servers.forEach((item, i) => {
-
 					if ( item.port == port ) servers.splice(i,1)
-
 				});
 
 				server.sockets.secundar.forEach((item, i) => {
-
 					item.end()
-
 				});
 
 			})
@@ -222,9 +199,7 @@ function adHocServer(port, name) {
 		}
 
 		else if ( server.sockets.primar  ) {
-
 			server.sockets.secundar.push( input )
-
 			input.on('error', function(e) {
 
 				console.log(port + " adhoc secoundar connection abruptly disconnected.")
@@ -232,17 +207,11 @@ function adHocServer(port, name) {
 			})
 
 			bridge_port = ports.pop()
-
 			console.log("new connection.")
-
 			bridge_server = adHocSubServer( bridge_port , input)
-
 			console.log("calling otherside.")
-
 			console.log("bridge port: " + bridge_port)
-
 			server.sockets.primar.write( String(bridge_port) + ";" )
-
 
 			input.on('close', function() {
 
@@ -314,22 +283,25 @@ function adHocSubServer(port, socket) {
 
 		console.log(server.port + " secure connection.")
 		var socket = socket
-		
+
 		if ( server.sockets.secundar == null ) {
 
 			server.sockets.secundar = socket
 
 			server.sockets.primar.on('data', (d) =>{
-						try {
-						server.sockets.secundar.write(d)
-						}
-						catch (e) {
-							console.log("error writing.")
-						}
+				var d = d
+				console.log(d)
+				try {
+				server.sockets.secundar.write(d)
+				}
+				catch (e) {
+					console.log("error writing.")
+				}
 			})
 
 			server.sockets.secundar.on('data', (d) =>{
-				// var data = d\
+				var d = d
+				console.log(d)
 				try {
 					server.sockets.primar.write(d)
 				}

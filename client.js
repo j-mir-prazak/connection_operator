@@ -53,20 +53,14 @@ function askBanker() {
 
 			persistent = setPersistent( parseInt(port), server_addr )
 
-			// client.destroy();
-
 		});
 
 		client.on('error', function() {
-
 			console.log('connection refused.')
-
 		})
 
 		client.on('close', function() {
-
 			console.log('Banker connection closed.');
-
 		});
 
 
@@ -86,15 +80,13 @@ function setPersistent(port, address) {
 		});
 
 		client.on('error', function(e) {
-
 			console.log('persistent connection reset.')
-
 		})
 
 		client.on('data', function(data) {
-
 			// console.log("persistent: " + data)
 			var port = decoder.write(data)
+
 			if ( port == "ping.") {
 				// console.log("ping.")
 				try {
@@ -103,16 +95,13 @@ function setPersistent(port, address) {
 				catch (e) {
 					console.log("error writing.")
 				}
-
 			}
 
 			else {
-
 				var ports = port.split(/;/)
 				console.log(ports)
 				ports.forEach((port, i) => {
 					if ( port != '') {
-
 						console.log(port)
 
 						var pair = {
@@ -121,49 +110,58 @@ function setPersistent(port, address) {
 							}
 
 						pairs.push(pair)
-
 						pair.local.on('connect', () => {
 							console.log('local connected')
 						})
-
 						pair.remote.on('connect', () => {
 							console.log('remote connected')
 						})
 
 
-						var stopper = setInterval(() => {
-							// console.log(pair.remote.writableNeedDrain)
-							if ( pair.local ) {
-								if ( pair.remote.writableNeedDrain ) {
-									pair.local.pause()
-									console.log("pause")
-								}
-								else {
-									pair.local.resume()
-									console.log("resume")
-								}
+						// var stopper = setInterval(() => {
+						// 	// console.log(pair.remote.writableNeedDrain)
+						// 	if ( pair.local ) {
+						// 		if ( pair.remote.writableNeedDrain ) {
+						// 			pair.local.pause()
+						// 			console.log("pause")
+						// 		}
+						// 		else {
+						// 			pair.local.resume()
+						// 			console.log("resume")
+						// 		}
+						// 	}
+						// }, 2)
+						var queue = null
+						var buffer_to_remote = new Array()
+						function queue_run() {
+							while (buffer_to_remote.length > 0 ) {
+								var data = buffer_to_remote.shift()
+								console.log(data)
+								pair.remote.write( data )
 							}
-						}, 100)
+							return null
+						}
+
 
 						pair.local.on('data', function(data) {
 							var data = data
+							buffer_to_remote.push(data)
+							if ( ! queue ) queue = queue_run()
 							// console.log(data)
 							// if ( pair.remote.writableLength > 1024*1024*256 ) pair.local.pause()
-							try {
-								pair.remote.write(data)
-							}
-							catch (e) {
-								console.log("error writing.")
-							}
+							// try {
+							// 	pair.remote.write(data)
+							//
+							// }
+							// catch (e) {
+							// 	console.log("error writing.")
+							// }
 						})
 
 						pair.remote.on('drain', () => {
 							console.log('drain.')
 
 						})
-
-
-
 
 						pair.remote.on('data', function(data) {
 							var data = data
@@ -193,17 +191,13 @@ function setPersistent(port, address) {
 		})
 
 		client.on('error', function(){
-
 			console.log('Persistent connection error.')
-
 		})
 
 
 		client.on('close', function() {
-
 			console.log('Persistent connection closed.');
 			persistent = null
-
 		});
 
 		return client
