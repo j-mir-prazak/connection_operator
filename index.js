@@ -290,7 +290,7 @@ function adHocSubServer(port, socket) {
 
 			server.sockets.primar.on('data', (d) =>{
 				var d = d
-				console.log(d)
+				// console.log(d)
 				try {
 				server.sockets.secundar.write(d)
 				}
