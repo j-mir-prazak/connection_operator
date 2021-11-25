@@ -397,7 +397,7 @@ function adHocSubServer(port, socket) {
 
 	});
 
-	hoc.keepAliveTimeout = 30000;
+	// hoc.keepAliveTimeout = 30000;
 
 	// hoc.on('newSession', (socket) => {
 	// 	console.log("connection newSession")
