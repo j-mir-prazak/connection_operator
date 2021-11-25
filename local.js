@@ -6,7 +6,12 @@ var decoder = new StringDecoder.StringDecoder('utf8');
 var fs = require('fs')
 var child_process = require('child_process')
 
-
+var server_options = {
+  key: fs.readFileSync('./cert/private.pem'),
+  cert: fs.readFileSync('./cert/self-sign.pem'),
+  // requestCert: true,
+  ca: [ fs.readFileSync('./cert/private-csr.pem') ]
+};
 
 var name = process.argv[3] || "avatar000"
 var local_port = process.argv[2] || 22
@@ -23,56 +28,6 @@ var connection_check = null
 var connection_timeout = null
 
 var secret = fs.readFileSync('./secret_factory', "utf-8")
-// if ( secret ) console.log(secret)
-
-function askBanker() {
-
-
-	var client = new net.TLSSocket();
-	client.connect(server_bank, server_addr, function(s) {
-
-			console.log('Connected.');
-
-			try {
-				client.write(secret+":"+name);
-			}
-			catch (e) {
-				console.log("error writing.")
-			}
-
-		});
-		//
-		client.on('data', function(data) {
-
-			var port = decoder.write(data)
-			console.log(port)
-			port = port.replace(/(.*?)\;.*/, "$1")
-			console.log(port)
-
-			console.log("set persistent on " + port + ".")
-
-			persistent = setPersistent( parseInt(port), server_addr )
-
-			// client.destroy();
-
-		});
-
-		client.on('error', function() {
-
-			console.log('connection refused.')
-
-		})
-
-		client.on('close', function() {
-
-			console.log('Banker connection closed.');
-
-		});
-
-
-}
-
-// askBanker()
 
 function setPersistent(port, address) {
 
@@ -130,25 +85,8 @@ function setPersistent(port, address) {
 							console.log('remote connected')
 						})
 
-
-						var stopper = setInterval(() => {
-							// console.log(pair.remote.writableNeedDrain)
-							if ( pair.local ) {
-								if ( pair.remote.writableNeedDrain ) {
-									pair.local.pause()
-									console.log("pause")
-								}
-								else {
-									pair.local.resume()
-									console.log("resume")
-								}
-							}
-						}, 100)
-
 						pair.local.on('data', function(data) {
 							var data = data
-							// console.log(data)
-							// if ( pair.remote.writableLength > 1024*1024*256 ) pair.local.pause()
 							try {
 								pair.remote.write(data)
 							}
@@ -157,16 +95,9 @@ function setPersistent(port, address) {
 							}
 						})
 
-						pair.remote.on('drain', () => {
-							console.log('drain.')
-
-						})
-
-
-
-
 						pair.remote.on('data', function(data) {
 							var data = data
+							console.log("remote data:\n" + data)
 							try {
 								pair.local.write(data)
 							}
@@ -178,7 +109,7 @@ function setPersistent(port, address) {
 						pair.local.on('close', function(){
 							console.log("local close; killing")
 							pair.local = null
-							if ( pair.remote && pair.remote.writableLength == 0 ) pair.remote.destroy()
+							if ( pair.remote ) pair.remote.destroy()
 						})
 
 						pair.remote.on('close', function(){
@@ -193,17 +124,12 @@ function setPersistent(port, address) {
 		})
 
 		client.on('error', function(){
-
 			console.log('Persistent connection error.')
-
 		})
 
-
 		client.on('close', function() {
-
 			console.log('Persistent connection closed.');
 			persistent = null
-
 		});
 
 		return client
@@ -243,15 +169,13 @@ function setLocal(port, address) {
 function setRemote(port, address) {
 
 	var client = new net.TLSSocket();
-
 	console.log("connect here: " + port)
 
-	// var client = tls.connect(port, server_addr, function(s) {
 	client.connect(port, server_addr, function(s) {
 		console.log('Server connected.');
 		// client.write("blank")
-		client.write(new Buffer.alloc(0))
 		// setInterval(() => { client.write(new Buffer.alloc(0)) }, 1000)
+
 	});
 
 	client.on('error', function(e){
@@ -276,54 +200,86 @@ function setRemote(port, address) {
 	return client
 }
 
-var connection_fails = 0
+function server(port) {
 
-console.log("setting interval.")
+	var port = port || false
 
-setInterval(function() {
+	console.log("serving on port " + port + ".")
 
+	var server
+	var hoc = net.createServer(server_options, (socket) => {
 
-	if ( connection_check == null ) {
+		console.log("connection on server.")
 
-		// console.log("ping server.")
+		var remote = socket
+		var local = setLocal(5555, "localhost")
 
-		connection_check = child_process.spawn("bash", new Array("-c", "./ping.sh"), {detached: true})
-		connection_check.on('exit', (e) => {
+		local.on('data', (d) => {
+			var data = d
+			try {
+				remote.write(data, () => {
 
-			// console.log(e)
+					if ( remote.writableLength > 1000 ) {
+						local.pause()
+						console.log("pause")
+					}
 
-			if ( e == 0 ) {
-
-				// console.log("still online.")
-				if ( persistent == null ) {
-
-					askBanker()
-
-				}
-
-				connection_timeout = setTimeout(function(){
-					// console.log("allow next check.")
-					connection_check = null
-				}, 3000)
+				})
+			}
+			catch (e) {
+				console.log("error writing.")
 			}
 
-			else {
-
-				if ( connection_fails > 6 ) {
-
-				console.log("no internets.")
-				if ( persistent ) persistent.destroy()
-				pesistent = null
-				connection_fails = 0
-
-				}
-
-				else connection_fails++
-
-				connection_check = null
-			}
 
 		})
 
-	}
-}, 2000)
+		remote.on('drain', () => {
+			console.log('drain')
+			console.log(remote.writableLength)
+			local.resume()
+		})
+
+		remote.on('data', (d) => {
+
+			var data = d
+
+
+			console.log(remote.writableLength)
+
+			try {
+				local.write(data)
+			}
+			catch (e) {
+				console.log("error writing.")
+			}
+
+
+
+		})
+
+
+		local.on('error', function(e) {
+			console.log("5555 connection abruptly disconnected.")
+		})
+
+		local.on('close', function() {
+			console.log("closing socket on port 5555.")
+			})
+
+		remote.on('error', function(e) {
+			console.log(port + " connection abruptly disconnected.")
+		})
+
+		remote.on('close', function() {
+			console.log("closing socket on port " + port + ".")
+			})
+
+	});
+
+	hoc.listen(port, '0.0.0.0');
+
+	return hoc
+
+}
+
+server(6666)

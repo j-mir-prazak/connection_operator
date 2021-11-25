@@ -313,96 +313,41 @@ function adHocSubServer(port, socket) {
 	var hoc = net.createServer(server_options, (socket) => {
 
 		console.log(server.port + " secure connection.")
-
 		var socket = socket
-
+		
 		if ( server.sockets.secundar == null ) {
 
 			server.sockets.secundar = socket
 
 			server.sockets.primar.on('data', (d) =>{
-
-
 						try {
-
 						server.sockets.secundar.write(d)
-
 						}
 						catch (e) {
-
 							console.log("error writing.")
-
 						}
-
-
 			})
 
 			server.sockets.secundar.on('data', (d) =>{
-
-				var data = d
+				// var data = d\
 				try {
-
-					if (data+"" == "blank" ) {
-						console.log("null data: " + data)
-					}
-					// else server.sockets.primar.write(data)
-					else {
-						server.sockets.primar.write(data)
-					}
+					server.sockets.primar.write(d)
 				}
 				catch (e) {
-
 					console.log("error writing.")
-
 				}
-
 			})
-
-			// try {
-			//
-			// var data = input.read()
-			// console.log(""+data)
-			// server.sockets.secundar.write( data )
-			//
-			// }
-			// catch (e) {
-			//
-			// 	console.log("error writing.")
-			//
-			// }
-
-
-
 		}
 
 		socket.on('error', function(e) {
-
 			console.log(port + " connection abruptly disconnected.")
-
 		})
 
 		socket.on('close', function() {
-
-
 			console.log("closing socket on port " + port + ".")
-			// console.log(ports)
-
-			// hoc.close()
-			// console.log(hoc)
-
-			// ports.push(port)
-			// console.log(ports)
-
 			})
 
 	});
-
-	// hoc.keepAliveTimeout = 30000;
-
-	// hoc.on('newSession', (socket) => {
-	// 	console.log("connection newSession")
-	// 	// console.log(socket)
-	// })
 
 
 	hoc.listen(port, '0.0.0.0');
