@@ -131,31 +131,31 @@ function setPersistent(port, address) {
 						// 		}
 						// 	}
 						// }, 2)
-						var queue = null
-						var buffer_to_remote = new Array()
-						function queue_run() {
-							while (buffer_to_remote.length > 0 ) {
-								var data = buffer_to_remote.shift()
-								console.log(data)
-								pair.remote.write( data )
-							}
-							return null
-						}
+						// var queue = null
+						// var buffer_to_remote = new Array()
+						// function queue_run() {
+						// 	while (buffer_to_remote.length > 0 ) {
+						// 		var data = buffer_to_remote.shift()
+						// 		console.log(data)
+						// 		pair.remote.write( data )
+						// 	}
+						// 	return null
+						// }
 
 
 						pair.local.on('data', function(data) {
 							var data = data
-							buffer_to_remote.push(data)
-							if ( ! queue ) queue = queue_run()
+							// buffer_to_remote.push(data)
+							// if ( ! queue ) queue = queue_run()
 							// console.log(data)
 							// if ( pair.remote.writableLength > 1024*1024*256 ) pair.local.pause()
-							// try {
-							// 	pair.remote.write(data)
-							//
-							// }
-							// catch (e) {
-							// 	console.log("error writing.")
-							// }
+							try {
+								pair.remote.write(data)
+							}
+							catch (e) {
+								console.log("error writing.")
+							}
+							
 						})
 
 						pair.remote.on('drain', () => {

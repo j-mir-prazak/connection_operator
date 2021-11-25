@@ -301,7 +301,7 @@ function adHocSubServer(port, socket) {
 
 			server.sockets.secundar.on('data', (d) =>{
 				var d = d
-				console.log(d)
+				console.log(server.sockets.primar.writableLength)
 				try {
 					server.sockets.primar.write(d)
 				}
